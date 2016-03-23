@@ -32,7 +32,6 @@
       link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
       document.getElementsByTagName( 'head' )[0].appendChild( link );
     </script>
-
     <!--[if lt IE 9]>
     <script src="lib/js/html5shiv.js"></script>
     <![endif]-->
@@ -121,15 +120,15 @@ var bozoItems = items.filter(item => item.is_bozo)
           <section>
             <h3>Arrow functions (cont)</h3>
             <ul>
-              <li>Side benefit is <code style="color:light-grey;">this</code> keyword does not change binding inside the function</li>
+              <li>Side benefit: <code style="color:light-grey;">this</code> keyword does not change binding inside the function</li>
             </ul>
 
             <pre><code class="hljs" data-trim contenteditable>
 // ES6
 function Person(){
   this.age = 0
-
   // var self = this // No longer necessary.
+
   setInterval(() => {
     this.age++ // |this| properly refers to the person object
   }, 1000)
@@ -209,7 +208,7 @@ favoriteThings() // 'pie7'
           <section>
             <h3>Spread Operator</h3>
             <ul>
-              <li>"Breaks out" key-values in obj or elements in list</li>
+              <li>"Breaks out" key-values in obj, or elements in list</li>
               <li>Similar to Python's splat operator (*args)</li>
             </ul>
 
@@ -266,8 +265,8 @@ import React, { Text, View } from 'react'
 modules.export = Model
 
 // ES6
-export { myFunc, name2, ..., nameN };
-export default Model;
+export { myFunc, name2, ..., nameN }
+export default Model
 export default function (…) {…} // also class
 export default function name1(…) { … } // also class
             </code></pre>
@@ -303,6 +302,77 @@ class Hello {
 }
             </code></pre>
           </section><!-- Classes -->
+
+          <!-- Generators -->
+          <section>
+            <h3>Generator functions</h3>
+            <ul>
+              <li>A "pausable" function.</li>
+              <li>Use <code>yield</code> to return a generator object</li>
+              <li>Calling gen.next() returns next object</li>
+            </ul>
+
+            <pre><code class="hljs" data-trim contenteditable>
+function* idMaker(){
+  let index = 0
+  while(index < 3) {
+    yield index++
+  }
+  return 'No more ids'
+}
+
+const genObj = idMaker()
+
+genObj.next() // {done: false, value: 1}
+genObj.next() // {done: false, value: 2}
+genObj.next() // {done: false, value: 3}
+genObj.next() // {done: true, value: 'No more ids'}
+            </code></pre>
+          </section><!-- Generators -->
+
+
+          <!-- Generators -->
+          <section>
+            <h3>Generator functions (cont.)</h3>
+            <ul>
+              <li class="fragment">Q: So... why do this?</li>
+              <li class="fragment">A: You can write async code in a synchronous fashion(!)</li>
+            </ul>
+            <pre class="fragment"><code class="hljs" data-trim contenteditable>
+function* getRecentUsernames() {
+  const items = yield fetchRecentItems()
+  const authors = items.map(i => i.author)
+  const [ users, profiles ] = yield [
+    fetchUsers(authors),
+    fetchProfiles(authors),
+  ]
+  return { users, profiles }
+}
+console.log(genWrapper(getRecentUsernames))
+            </code></pre>
+          </section><!-- Generators -->
+
+          <!-- Async Functions -->
+          <section>
+            <h3>Async Functions</h3>
+            <ul>
+              <li>Does same as generators, but without wrapper</li>
+            </ul>
+            <pre><code class="hljs" data-trim contenteditable>
+async function getRecentUsernames() {
+  const items = await fetchRecentItems()
+  const authors = items.map(i => i.author)
+  const [ users, profiles ] = await Promise.all([
+    fetchUsers(authors),
+    fetchProfiles(authors)
+  ])
+  return { users, profiles }
+}
+
+console.log(await getRecentUsernames())
+            </code></pre>
+          </section><!-- Async Functions -->
+
         </section> <!-- End of ES6 -->
 
         <!-- React Fundamentals -->
@@ -418,6 +488,12 @@ const itemList => (
           <section>
              <img src="http://i.imgur.com/3ZIphJh.png">
           </section><!-- Tim's Gliffy Diagram -->
+
+          <!-- Medium "Rethinking Redux" article -->
+          <section>
+             <img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*MKL1Im4ElgB38_MsubiMjw.png">
+          </section><!-- Medium "Rethinking Redux" article -->
+          <!-- source: https://voice.kadira.io/rethinking-redux-f1e96daba60c#.nlkz7g34a -->
 
           <!-- Store -->
           <section>
@@ -790,7 +866,7 @@ Reveal.addEventListener( 'customevent', function() {
         history: true,
         center: true,
 
-        transition: 'zoom', // none/fade/slide/convex/concave/zoom
+        transition: 'convex', // none/fade/slide/convex/concave/zoom
 
         // Optional reveal.js plugins
         dependencies: [
