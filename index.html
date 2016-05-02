@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en">
+<!--  style="color: #ff2c2d;" red  -->
+<!--  style="color: #1b91ff;" blue  -->
+<!--  style="color: #17ff2e;" green  -->
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>DNA Mobile App: Tech</title>
+
+    <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+    <meta name="author" content="Hakim El Hattab">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Main -->
+      <div class="slides">
+        <section>
+          <h1>DNA Mobile App</h1>
+          <h3>Understanding ES6, React, React Native, & Redux</h3>
+          <p>
+            <small>Created by <a href="http://timbuckley.github.io">Tim Buckley</a></small>
+          </p>
+        </section>
+
+        <!-- Table of contents -->
+        <section>
+          <h2>Contents</h2>
+            <table>
+              <tr>
+                <td><em style="color: #ff2c2d;">ES6</em></td>
+                <td style="font-size: 25px;">Advanced JavaScript features</td>
+              </tr>
+              <tr>
+                <td><em style="color: #1b91ff;">React fundamentals</em></td>
+                <td style="font-size: 25px;">What React really does</td>
+              </tr>
+              <tr>
+                <td><em style="color: #1b91ff;">React Native</em></td>
+                <td style="font-size: 25px;">Framework for building native mobile apps using React</td>
+              </tr>
+              <tr>
+                <td><em style="color: #17ff2e;">Redux</em></td>
+                <td style="font-size: 25px;">State management library we use for React Native</td>
+              </tr>
+            </table>
+        </section>
+
+
+
+
+        <!-- ES6 -->
+        <section>
+          <!-- ES6: Main -->
+          <section>
+            <h2 style="color: #ff2c2d;">ES6</h2>
+            <ul>
+              <li class="fragment">Next version of JavaScript</li>
+              <li class="fragment">All of ES5 (current JavaScript) works in ES6</li>
+              <li class="fragment">Mostly just syntax sugar - can do everything in plain ES5</li>
+              <li class="fragment">Works out of the box in React Native</li>
+            </ul>
+          </section>
+
+          <!-- ES6: arrow functions -->
+          <section>
+            <h3>Arrow functions</h3>
+            <ul>
+              <li>Nicer syntax for anonymous functions</li>
+            </ul>
+            <pre><code class="hljs" data-trim contenteditable>
+// ES5
+function (x, y) {
+  return x + y
+}
+
+// ES6
+(x, y) => x + y
+
+// Example
+var bozoItems = items.filter(item => item.is_bozo)
+
+// Can also use multiline.
+var sum = (x, y) => {
+  console.log('The sum is...')
+  return x + y
+}
+            </code></pre>
+          </section>
+
+          <!-- ES6: arrow functions, part 2 -->
+          <section>
+            <h3>Arrow functions (cont)</h3>
+            <ul>
+              <li>Side benefit: <code style="color:light-grey;">this</code> keyword does not change binding inside the function</li>
+            </ul>
+
+            <pre><code class="hljs" data-trim contenteditable>
+// ES6
+function Person(){
+  this.age = 0
+  // var self = this // No longer necessary.
+
+  setInterval(() => {
+    this.age++ // |this| properly refers to the person object
+  }, 1000)
+}
+var p = new Person()
+            </code></pre>
+          </section>
+
+          <!-- ES6: const and let -->
+          <section>
+            <h3>Const and let</h3>
+            <ul>
+              <li>New versions of <code>var</code></li>
+              <li><code>let</code> - can be reassigned, follows scope</li>
+              <li><code>const</code> - cannot be reassigned</li>
+            </ul>
+            <pre><code class="hljs" data-trim contenteditable>
+let a = 1
+a = 2 // OK
+
+const b = 1
+b = 2 // -> ERROR
+
+const nums = [1, 2, 3, 4]
+nums.push(5) // OK. Variable can be modified, just not reassigned.
+            </code></pre>
+          </section><!-- ES6: const and let -->
+
+          <!-- ES6: const and let (part 2) -->
+          <section>
+            <h3>Const and let (cont.)</h3>
+            <ul>
+              <li>Adhere to block scope (yay!)</li>
+              <li>Not hoisted outside of scope</li>
+            </ul>
+            <pre><code class="hljs" data-trim contenteditable>
+function foo() {
+  if (true) {
+    const myvar = 1
+    console.log(myvar) // prints 1
+  }
+
+  try {
+    console.log(myvar)
+  } catch(ex) {
+    console.log('Cannot access myvar outside its block')
+  }
+}
+foo()
+            </code></pre>
+          </section><!-- ES6: const and let (part 2) -->
+
+          <!-- Default parameters -->
+          <section>
+            <h3>Default parameters</h3>
+
+            <pre><code class="hljs" data-trim contenteditable>
+// ES5
+function favoriteThings(pie, num) {
+  pie = pie || 'apple'
+  num = num || 7
+
+  return pie + num
+}
+favoriteThings() // 'pie7'
+
+// ES6
+function favoriteThings(pie = 'apple', num = 7) {
+  return pie + num
+}
+favoriteThings() // 'pie7'
+            </code></pre>
+
+          </section><!-- Default parameters -->
+
+          <!-- Spread Operator -->
+          <section>
+            <h3>Spread Operator</h3>
+            <ul>
+              <li>"Breaks out" key-values in obj, or elements in list</li>
+              <li>Similar to Python's splat operator (*args)</li>
+            </ul>
+
+            <pre><code class="hljs" data-trim contenteditable>
+const myObj = {a: 1, b: 2, c: 3, d: 4}
+const newObj = { ...myObj, d: 40, e: 50}
+console.log(myObj) // {a: 1, b: 2, c: 3, d: 4}
+console.log(newObj) // {a: 1, b: 2, c: 3, d: 40, e: 50}
+
+const letters = ['b', 'c', 'd']
+const newLetters = ['a', ...letters, 'e']
+console.log(letters) // ['b', 'c', 'd']
+console.log(newLetters) // ['a', 'b', 'c', 'd', 'e']
+            </code></pre>
+          </section><!-- Spread Operator -->
+
+
+          <!-- Destructuring -->
+          <section>
+            <h3>Destructuring</h3>
+
+            <pre><code class="hljs" data-trim contenteditable>
+const numbers = [10, 20, 30, 40, 50]
+const [first, ...middle, last] = numbers
+console.log(first, last) // 10, 50
+console.log(middle) // [20, 30, 40]
+
+const position = {lat: 42, lng: 17, alt: 100}
+const { lat, lng } = position
+console.log(lat, lng) // 42, 17
+
+const printLoc = ({lat, lng, alt}) => console.log(alt, lat, lng)
+printLoc(position) // 100, 42, 17
+            </code></pre>
+          </section><!-- Destructuring -->
+
+          <!-- Import/Export -->
+          <section>
+            <h3>Import/Export</h3>
+            <pre><code class="hljs" data-trim contenteditable>
+// Importing
+// ES5
+var React = require('react')
+var Text = React.Text
+var View = React.View
+
+// ES6
+import React, { Text, View } from 'react'
+            </code></pre>
+						<br />
+            <pre><code class="hljs" data-trim contenteditable>
+// Exporting
+// ES5
+modules.export = Model
+
+// ES6
+export { myFunc, name2, ..., nameN }
+export default Model
+export default function (…) {…} // also class
+export default function name1(…) { … } // also class
+            </code></pre>
+
+
+
+          </section><!-- Import/Export -->
+
+          <!-- Classes -->
+          <section>
+            <h3>Classes</h3>
+            <ul>
+              <li>Somewhat controversial ¯\_(ツ)_/¯</li>
+            </ul>
+
+            <pre><code class="hljs" data-trim contenteditable>
+// ES5
+function Hello(name) {
+  this.name = name
+  this.hello = function hello() {
+    return 'Hello' + this.name
+  }
+}
+
+// ES6
+class Hello {
+  constructor(name) {
+    this.name = name
+  }
+  hello() {
+    return 'Hello ' + this.name
+  }
+}
+            </code></pre>
+          </section><!-- Classes -->
+
+          <!-- Generators -->
+          <section>
+            <h3>Generator functions</h3>
+            <ul>
+              <li>A "pausable" function.</li>
+              <li>Use <code>yield</code> to return a generator object</li>
+              <li>Calling gen.next() returns next object</li>
+            </ul>
+
+            <pre><code class="hljs" data-trim contenteditable>
+function* idMaker(){
+  let index = 0
+  while(index < 3) {
+    yield index++
+  }
+  return 'No more ids'
+}
+
+const genObj = idMaker()
+
+genObj.next() // {done: false, value: 1}
+genObj.next() // {done: false, value: 2}
+genObj.next() // {done: false, value: 3}
+genObj.next() // {done: true, value: 'No more ids'}
+            </code></pre>
+          </section><!-- Generators -->
+
+
+          <!-- Generators -->
+          <section>
+            <h3>Generator functions (cont.)</h3>
+            <ul>
+              <li class="fragment">Q: So... why do this?</li>
+              <li class="fragment">A: You can write async code in a synchronous fashion(!)</li>
+            </ul>
+            <pre class="fragment"><code class="hljs" data-trim contenteditable>
+function* getRecentUsernames() {
+  const items = yield fetchRecentItems()
+  const authors = items.map(i => i.author)
+  const [ users, profiles ] = yield [
+    fetchUsers(authors),
+    fetchProfiles(authors),
+  ]
+  return { users, profiles }
+}
+console.log(genWrapper(getRecentUsernames))
+            </code></pre>
+          </section><!-- Generators -->
+
+          <!-- Async Functions -->
+          <section>
+            <h3>Async Functions</h3>
+            <ul>
+              <li>Does same as generators, but without wrapper</li>
+            </ul>
+            <pre><code class="hljs" data-trim contenteditable>
+async function getRecentUsernames() {
+  const items = await fetchRecentItems()
+  const authors = items.map(i => i.author)
+  const [ users, profiles ] = await Promise.all([
+    fetchUsers(authors),
+    fetchProfiles(authors)
+  ])
+  return { users, profiles }
+}
+
+console.log(getRecentUsernames())
+            </code></pre>
+          </section><!-- Async Functions -->
+
+        </section> <!-- End of ES6 -->
+
+<!-- ====== React Fundamentals ==== -->
+        <!-- React Fundamentals -->
+        <section>
+          <!-- Overview -->
+          <section>
+            <h2 style="color: #1b91ff;">React Fundamentals</h2>
+            <ul>
+              <li class="fragment">Facebook library for building user interfaces.</li>
+              <li class="fragment">The "V" in MVC</li>
+              <li class="fragment">Simplifies ui to: <code>(state) => ui</code></li>
+							<li class="fragment">Uses Virtual DOM to calculate minimal number of DOM changes necessary, then does them.</li>
+							<li class="fragment">Encourages nested components.</li>
+							<li class="fragment">One-way data binding. Predictible == Easy to Test</li>
+            </ul>
+          </section><!-- Overview -->
+
+
+          <!-- Nesting components -->
+					<section>
+            <h3>Nesting components</h3>
+            <img
+							src="http://i.imgur.com/jO98BOz.png"/>
+          </section><!-- Nesting components -->
+
+
+					<!-- Representing the DOM -->
+					<section>
+            <img
+							src="http://teropa.info/images/onchange_vdom_initial.svg"
+							style="background: white;" />
+						<pre><span style="font-size: 9px;">Source: http://teropa.info/blog/2015/03/02/change-and-its-detection-in-javascript-frameworks.html</span></pre>
+          </section><!-- Representing the DOM -->
+
+
+					<!-- DOM change -->
+					<section>
+            <img
+							src="http://teropa.info/images/onchange_vdom_change.svg"
+							style="background: white;">
+						<pre><span style="font-size: 9px;">Source: <a
+							href="http://teropa.info/blog/2015/03/02/change-and-its-detection-in-javascript-frameworks.html">
+								http://teropa.info/blog/2015/03/02/change-and-its-detection-in-javascript-frameworks.html</a>
+						</span></pre>
+          </section><!-- DOM change -->
+
+          <!-- JSX example -->
+          <section>
+            <h3>JSX Example</h3>
+            <img
+							src="http://i.imgur.com/aJVFL2R.png"
+            />
+          </section><!-- JSX example -->
+
+
+          <!-- JSX transpiled -->
+          <section>
+            <h3>Transpiled JSX</h3>
+            <img
+							src="http://i.imgur.com/Q50EOcO.png"
+            />
+          </section><!-- JSX transpiled -->
+
+
+          <!-- 3 ways to write React components (func vs createClass vs class) -->
+          <section>
+            <h4>3 ways to write React Components</h4>
+            <img
+              src="http://i.imgur.com/NBUhJzL.png"
+            />
+          </section><!-- 3 ways to write React components (func vs createClass vs class) -->
+
+        </section><!-- React Fundamentals -->
+
+<!-- ====== React Native ==== -->
+        <!-- React Native -->
+        <section>
+          <!-- Overview -->
+          <section>
+            <h2 style="color: #1b91ff;">React Native</h2>
+          </section><!-- Overview -->
+
+          <!-- React Native is just React for Mobile -->
+          <section>
+            <h3>React Native: just React for mobile</h3>
+            <img
+							src="http://i.imgur.com/NjZYalF.png"
+            />
+          </section><!-- React Native is just React for Mobile -->
+
+          <!-- React vs React Native nodes -->
+          <section>
+            <h3>HTML vs Native nodes</h3>
+            <img
+  						src="http://i.imgur.com/OaAUOIE.png"
+            />
+          </section><!-- React vs React Native nodes -->
+
+          <!-- Styling in React Native -->
+          <section>
+            <h3>Styling in React Native</h3>
+            <img
+							src="http://i.imgur.com/5DB5CYP.png"
+            />
+          </section><!-- Styling in React Native -->
+
+          <!-- Peter Griffin CSS -->
+          <section>
+            <img
+  						src="http://i.imgur.com/Q3cUg29.gif"
+            />
+          </section><!-- Peter Griffin CSS -->
+
+
+          <!-- Styling: Flexbox -->
+          <section>
+            <h3>Styling: Flexbox</h3>
+            <img
+							src="http://i.imgur.com/YZghAFo.jpg"
+            />
+          </section><!-- Styling: Flexbox -->
+
+          <!-- Chrome Debugger -->
+          <section>
+            <h3>Chrome Debugger: Just like web dev</h3>
+            <img
+              height="600"
+              width="600"
+							src="http://i.imgur.com/DWGZVKx.jpg"
+            />
+          </section><!-- Chrome Debugger -->
+
+          <!-- Hot Reloading -->
+          <section>
+            <h3>Hot Reloading</h3>
+            <p>(Demo)</p>
+          </section><!-- Hot Reloading -->
+
+        </section><!-- React Native -->
+
+<!-- ====== Redux ==== -->
+        <!-- Redux -->
+        <section>
+          <!-- Overview -->
+          <section>
+            <h2 style="color: #17ff2e;">Redux</h2>
+            <ul>
+              <li class="fragment">State management library we use for React Native</li>
+              <li class="fragment">NOT an MVC style. Functional Programing paradigm</li>
+              <li class="fragment">Most popular library for React/RN (even more than FB's own Flux)</li>
+              <li class="fragment">Three easy pieces:
+                <ul>
+                  <li class="fragment"><strong>Store</strong>: One source of truth for app <em>(Big ol' JS object)</em></li>
+                  <li class="fragment"><strong>Actions</strong>: Events/user interactions that change app <em>(JS objects).</em></li>
+                  <li class="fragment"><strong>Reducers</strong>: Transforms current state into new state <em>(Pure JS function)</em></li>
+                </ul>
+              </li>
+            </ul>
+          </section><!-- Overview -->
+
+
+          <!-- Redux Flow -->
+          <!-- <section>
+            <img src="http://i.imgur.com/y1vWR5L.png">
+          </section> -->
+          <!-- Redux Flow -->
+
+          <!-- Redux Diagram -->
+          <!-- <section>
+             <img src="https://cdn-images-1.medium.com/max/800/1*U5IJvpfOF0-A4TVk9L8dIw.png">
+          </section> -->
+          <!-- Redux Diagram -->
+
+          <!-- Redux Simple Diagram -->
+          <!-- <section>
+             <img src="https://camo.githubusercontent.com/83fef7601c50c8b025953579e5c5be3aa47ee51d/687474703a2f2f692e696d6775722e636f6d2f30756e68744e512e6a7067">
+          </section> -->
+          <!-- Redux Simple Diagram -->
+
+
+          <!-- Medium "Rethinking Redux" article -->
+          <!-- <section>
+             <img src="https://d262ilb51hltx0.cloudfront.net/max/800/1*MKL1Im4ElgB38_MsubiMjw.png">
+          </section> -->
+          <!-- Medium "Rethinking Redux" article -->
+          <!-- source: https://voice.kadira.io/rethinking-redux-f1e96daba60c#.nlkz7g34a -->
+
+          <!-- Store -->
+          <section>
+            <h3>Store</h3>
+            <ul>
+              <li>Holds global app state</li>
+              <li>React components subscribe to Store and re-render when state changes</li>
+            </ul>
+
+            <pre><code class="hljs" data-trim contenteditable>
+{
+  newsfeed: {
+    items: [item1, item2, ...],
+    error: '',
+    loading: false
+  },
+  composeItem: {
+    body: '...',
+    nbhds: [],
+  },
+  global: {
+    user: {
+      username: 'user1'
+    }
+  },
+  (...)
+}
+            </code></pre>
+
+          </section><!-- Store -->
+
+          <!-- Actions -->
+          <section>
+            <h3>Actions</h3>
+            <ul>
+              <li>Represents any event that can change state.<ul>
+                <li>(user actions, server responses, etc.)</li>
+              </ul></li>
+              <li>Simple JavaScript objects (must have a "type" property)</li>
+            </ul>
+
+            <pre><code class="hljs" data-trim contenteditable>
+{
+  type: 'SELECTED_ITEM',
+  itemId: 123
+}
+
+{
+  type: 'NEWSFEED_LOADED',
+  items: [item1, item2, ...]
+}
+            </code></pre>
+          </section><!-- Actions -->
+
+          <!-- Reducers -->
+          <section>
+            <h3>Reducers</h3>
+            <ul>
+              <li><em>Only</em> way app state in the Store can change.</li>
+              <li><code>(currentState, newAction) -> newState</code></li>
+							<li>Pure function that takes old state + action and emits a new state</li>
+            </ul>
+						<br/>
+						<br/>
+            <pre><code class="hljs" data-trim contenteditable>
+function itemsReducer(state = initialState, action = {}) {
+  switch (action.type) {
+    case 'FAV_ITEM':
+      const { itemId } = action
+      return {
+        ...state,
+        items: state.items.map(i =>
+                        i.id === itemId ? favItem(i) : i)
+      }
+    default:
+      return state
+  }
+}
+            </code></pre>
+          </section><!-- Reducers -->
+
+          <!-- Tim's Gliffy Diagram -->
+          <section>
+             <img src="http://i.imgur.com/3ZIphJh.png">
+          </section><!-- Tim's Gliffy Diagram -->
+
+          <!-- Bonus piece: Middleware -->
+          <section>
+            <h3>Bonus piece: Middleware</h3>
+            <ul>
+							<li class="fragment">Optional. Sit between actions and reducers</li>
+              <li class="fragment">Allow actions to be changed/delayed/stopped before hitting reducers</li>
+              <li class="fragment">Examples of middleware: <ul>
+                <li class="fragment">redux-promise - Resolves any promises in Actions before reducing</li>
+                <li class="fragment">redux-logger - Logs new actions to console</li>
+                <li class="fragment">redux-thunk - executes</li>
+              </ul></li>
+            </ul>
+						<br/>
+						<br/>
+          </section>
+          <!-- Bonus piece: Middleware -->
+        </section><!-- Redux -->
+
+        <!-- THE END -->
+        <section>
+          <h1>THE End</h1>
+        </section><!-- THE END -->
+
+<!-- ====== Redux ==== -->
+
+      </div>
+
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+
+        transition: 'convex', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true },
+          { src: 'plugin/notes/notes.js', async: true }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
