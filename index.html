@@ -131,15 +131,15 @@ var sum = (x, y) => {
 
             <pre><code class="hljs" data-trim contenteditable>
 // ES6
-function Person(){
+function makePerson(){
   this.age = 0
-  // var self = this // No longer necessary.
+  var self = this // No longer necessary.
 
   setInterval(() => {
     this.age++ // |this| properly refers to the person object
   }, 1000)
 }
-var p = new Person()
+var p = new makePerson()
             </code></pre>
           </section>
 
