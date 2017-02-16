@@ -100,15 +100,19 @@
             </ul>
             <pre><code class="hljs" data-trim contenteditable>
 // ES5
-function (x, y) {
+function add(x, y) {
+  return x + y
+}
+
+var add = function(x, y) {
   return x + y
 }
 
 // ES6
-(x, y) => x + y
+var add = (x, y) => x + y
 
 // Example
-var bozoItems = items.filter(item => item.is_bozo)
+var biggerNums = [1,2,3].map(num => num * 10)
 
 // Can also use multiline.
 var sum = (x, y) => {
