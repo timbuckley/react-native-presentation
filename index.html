@@ -167,21 +167,22 @@ nums.push(5) // OK. Variable can be modified, just not reassigned.
           <section>
             <h3>Const and let (cont.)</h3>
             <ul>
-              <li>Adhere to block scope (yay!)</li>
-              <li>Not hoisted outside of scope</li>
+              <li><code>var</code> adheres to function scope</li>
+              <li><code>const/let</code> adhere to block scope (like other languages)</li>
             </ul>
             <pre><code class="hljs" data-trim contenteditable>
 function foo() {
-  if (true) {
-    const myvar = 1
-    console.log(myvar) // prints 1
-  }
-
-  try {
-    console.log(myvar)
-  } catch(ex) {
-    console.log('Cannot access myvar outside its block')
-  }
+   var alpha = 1
+   if (alpha >= 0) {
+      var beta = 2
+      let gamma = 3
+      console.log(alpha) // prints 1
+      console.log(beta) // prints 2
+      console.log(gamma) // prints 3
+   }
+   console.log(alpha) // prints 1
+   console.log(beta) // prints 2
+   console.log(gamma) // ERROR. gamma is not defined
 }
 foo()
             </code></pre>
