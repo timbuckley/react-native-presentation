@@ -239,9 +239,9 @@ console.log(newLetters) // ['a', 'b', 'c', 'd', 'e']
 
             <pre><code class="hljs" data-trim contenteditable>
 const numbers = [10, 20, 30, 40, 50]
-const [first, ...middle, last] = numbers
-console.log(first, last) // 10, 50
-console.log(middle) // [20, 30, 40]
+const [first, second, ...remaining] = numbers
+console.log(first, second) // 10, 20
+console.log(remaining) // [30, 40, 50]
 
 const position = {lat: 42, lng: 17, alt: 100}
 const { lat, lng } = position
